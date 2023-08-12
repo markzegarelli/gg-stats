@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="output.css">
+  <title>Vite App</title>
+</head>
+
+<body>
+  <div class="container mx-auto">
+    <select id="fileSelector">
+      <option value="" selected disabled>Select a CSV file</option>
+      <option value="data/aaron-thompson.csv">Aaron Thompson</option>
+      <option value="data/alex-plasencia.csv">ALEX PLASENCIA</option>
+      <option value="data/blair-menard.csv">Blair Menard</option>
+      <option value="data/brandon-paluzzi.csv">Brandon Paluzzi</option>
+      <option value="data/brendan-burke.csv">BRENDAN BURKE</option>
+      <option value="data/brian-flanigan-jr.csv">BRIAN FLANIGAN JR</option>
+      <option value="data/brian-mccormack.csv">BRIAN MCCORMACK</option>
+      <option value="data/caleb-astey.csv">Caleb Astey</option>
+      <option value="data/chris-matthews.csv">Chris Matthews</option>
+      <option value="data/christopher-hirneisen.csv">Christopher Hirneisen</option>
+      <option value="data/christopher-mcallister.csv">CHRISTOPHER MCALLISTER</option>
+      <option value="data/david-raber.csv">David Raber</option>
+      <option value="data/david-rivera.csv">David Rivera</option>
+      <option value="data/erik-contreras.csv">Erik Contreras</option>
+      <option value="data/evan-borzilleri.csv">Evan Borzilleri</option>
+      <option value="data/gina-sawaya.csv">GINA SAWAYA</option>
+      <option value="data/jack-levy.csv">Jack Levy</option>
+      <option value="data/jason-moseley.csv">Jason Moseley</option>
+      <option value="data/jeffery-grossman.csv">Jeffrey Grossmann</option>
+      <option value="data/kevin-pederson.csv">Kevin Pederson</option>
+      <option value="data/kyle-betancourt.csv">Kyle Bentancourt</option>
+      <option value="data/marco-pacheco.csv">Marco Pacheco</option>
+      <option value="data/mark-zegarelli.csv">Mark Zegarelli</option>
+      <option value="data/maximillian-mueller.csv">Maximillian Mueller</option>
+      <option value="data/michael-dearborn.csv">Michael Dearborn</option>
+      <option value="data/michael-dobson.csv">Michael Dobson</option>
+      <option value="data/mike-dobson.csv">Mike Dobson</option>
+      <option value="data/nicole-ketterer.csv">Nicole Ketterer</option>
+      <option value="data/paul-lundquiest.csv">Paul Lundquist</option>
+      <option value="data/paul-mullen.csv">Paul Mullen</option>
+      <option value="data/pierre-lechene.csv">Pierre Lechene</option>
+      <option value="data/robert-kershaw.csv">ROBERT KERSHAW</option>
+      <option value="data/robert-price.csv">Robert Price</option>
+      <option value="data/tess-nogles.csv">Tess Nogles</option>
+      <option value="data/thom-bruce.csv">Thom Bruce</option>
+      <option value="data/timothy-lewis.csv">Timothy Lewis</option>
+      <option value="data/tony-lee.csv">Tony Lee</option>
+      <option value="data/vladislav-teplitsky.csv">VLADISLAV TEPLITSKY</option>
+      <!-- Add more options for your CSV files -->
+    </select>
+
+    <div id="tableContainer" class="relative overflow-x-auto">
+      <table id="dataTable" class="table-auto w-full">
+        <thead>
+          <tr></tr>
+        </thead>
+        <tbody>
+          <!-- Table rows will be added here dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+
+    </table>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const fileSelector = document.getElementById('fileSelector');
+      const dataTable = document.getElementById('dataTable');
+
+      fileSelector.addEventListener('change', function () {
+        const selectedFile = fileSelector.value;
+
+        if (selectedFile) {
+          fetch(selectedFile) // Assuming the files are in the same directory as the HTML file
+            .then(response => response.text())
+            .then(csvData => {
+              const rows = csvData.trim().split('\n');
+              const headers = rows[0].split(',');
+
+              // Clear existing table data
+              dataTable.innerHTML = '<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"><tr></tr></thead><tbody></tbody>';
+
+              // Add headers to the table
+              const headerRow = dataTable.querySelector('thead tr');
+              headers.forEach(header => {
+                const th = document.createElement('th');
+                th.classList.add("px-6", "py-3", "text-left")
+                th.textContent = header;
+                headerRow.appendChild(th);
+              });
+
+              // Add data rows to the table
+              const tbody = dataTable.querySelector('tbody');
+              for (let i = 1; i < rows.length; i++) {
+                const data = rows[i].split(',');
+                const row = document.createElement('tr');
+                row.classList.add("bg-white", "border-transparent", "border-b-gray-700", "text-sm", "hover:bg-gray-50")
+                data.forEach(cell => {
+                  const td = document.createElement('td');
+                  td.classList.add("px-6", "py-2")
+                  td.textContent = cell;
+                  row.appendChild(td);
+                });
+                tbody.appendChild(row);
+              }
+            })
+            .catch(error => {
+              console.error('Error loading CSV file:', error);
+            });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
